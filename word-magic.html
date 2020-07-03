@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+    <title>Document</title>
+</head>
+<body>
+<div>
+    <form >
+        <input id="scrambled" placeholder="enter scrambled letters" type="text" value="">
+        <p>results</p>
+        <div id="results"></div>
+    </form>
+    <button onclick="getPermutations()">Find words</button>
+
+</div>
+<script>
+    function getPermutations() {
+        let string = document.getElementById('scrambled').value;
+        console.log(string);
+        postData('http://192.168.0.12:8091/unscramble', { "scrambled": string })
+            .then(wordlist => {
+                let res = document.getElementById('results');
+                let words = "<ul>";
+                for (let perm in wordlist) {
+                    words += "<li>" + wordlist[perm] + "</li> "
+                }
+                words += "</ul>";
+                res.innerHTML = words;
+            });
+    }
+    async function postData(url = '', data = {}) {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        return response.json();
+    }
+</script>
+</body>
+</html>

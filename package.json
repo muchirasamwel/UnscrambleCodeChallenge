@@ -1,0 +1,11 @@
+{
+  "name": "CodeChallenge",
+  "version": "1.0.0",
+  "dependencies": {
+    "express": "^4.17.1",
+    "body-parser": "latest"
+  },
+  "devDependencies": {
+    "cors": "^2.8.5"
+  }
+}
