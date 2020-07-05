@@ -8,6 +8,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 let dictionary = [];
+let realWords=[];
 let server = app.listen(port, function () {
     let port = server.address().port;
     console.log('NODE SERVER RUNNING on localhost:' + port);
@@ -22,16 +23,7 @@ app.post('/unscramble', function (req, res) {
 
 let unscramble = async (scrambled) => {
     await getDictionary();
-    let permutations = findPermutations(scrambled);
-    // console.log(permutations);
-    let realWords = [];
-    permutations.forEach(function (word) {
-        if (realWords.indexOf(word) === -1) {
-            let t = langCheck(word);
-            if (t)
-                realWords.push(word)
-        }
-    })
+    findPermutations(scrambled);
     return realWords;
 };
 
@@ -52,9 +44,17 @@ let findPermutations = (string) => {
         let char = string[i]
         let remainingChars = string.slice(0, i) + string.slice(i + 1, string.length)
         for (let permutation of findPermutations(remainingChars)) {
-            permutationsArray.push(char + permutation)
+            let word = char + permutation;
+            if (realWords.indexOf(word) === -1) {
+                let t = langCheck(word);
+                if (t)
+                    realWords.push(word)
+            }
+            permutationsArray.push(word);
         }
+
     }
+
     return permutationsArray
 }
 
